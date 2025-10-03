@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("VentadeBoletosAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0859e19264f226307ff162f064e941f15dfda723")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4f0d5b6f9cf6d2e809e3b09ff84109c14dd4336e")]
 [assembly: System.Reflection.AssemblyProductAttribute("VentadeBoletosAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("VentadeBoletosAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
