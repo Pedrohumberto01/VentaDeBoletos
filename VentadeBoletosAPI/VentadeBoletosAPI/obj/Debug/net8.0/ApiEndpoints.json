@@ -1,5 +1,51 @@
 [
   {
+    "ContainingType": "VentadeBoletosAPI.Controllers.AsientoController",
+    "Method": "GetAsientos",
+    "RelativePath": "api/Asiento/ObtenerAsientos",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[VentadeBoletosAPI.Models.Asiento, VentadeBoletosAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "VentadeBoletosAPI.Controllers.AsientoController",
+    "Method": "GetAsientosPorZona",
+    "RelativePath": "api/Asiento/ObtenerAsientosPorZona/{zonaId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "zonaId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[VentadeBoletosAPI.Models.Asiento, VentadeBoletosAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "AuthController",
     "Method": "VerificarCredencialesAsync",
     "RelativePath": "api/Auth/VerificarCredenciales",
@@ -21,6 +67,52 @@
     "ReturnTypes": [
       {
         "Type": "System.Int32",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "VentadeBoletosAPI.Controllers.EventosController",
+    "Method": "PostEvento",
+    "RelativePath": "api/Eventos/CrearEvento",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "evento",
+        "Type": "VentadeBoletosAPI.Models.Evento",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "VentadeBoletosAPI.Models.Evento",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "VentadeBoletosAPI.Controllers.EventosController",
+    "Method": "GetEventos",
+    "RelativePath": "api/Eventos/ObtenerEventos",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[VentadeBoletosAPI.Models.Evento, VentadeBoletosAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -140,16 +232,22 @@
     ]
   },
   {
-    "ContainingType": "VentadeBoletosAPI.Controllers.WeatherForecastController",
-    "Method": "Get",
-    "RelativePath": "WeatherForecast",
-    "HttpMethod": "GET",
+    "ContainingType": "VentadeBoletosAPI.Controllers.ZonasController",
+    "Method": "PostZonas",
+    "RelativePath": "api/Zonas/CrearZona",
+    "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "zona",
+        "Type": "VentadeBoletosAPI.Models.Zona",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[VentadeBoletosAPI.WeatherForecast, VentadeBoletosAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "VentadeBoletosAPI.Models.Zona",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -157,7 +255,26 @@
         ],
         "StatusCode": 200
       }
-    ],
-    "EndpointName": "GetWeatherForecast"
+    ]
+  },
+  {
+    "ContainingType": "VentadeBoletosAPI.Controllers.ZonasController",
+    "Method": "GetZonas",
+    "RelativePath": "api/Zonas/ObtenerZonas",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[VentadeBoletosAPI.Models.Zona, VentadeBoletosAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   }
 ]

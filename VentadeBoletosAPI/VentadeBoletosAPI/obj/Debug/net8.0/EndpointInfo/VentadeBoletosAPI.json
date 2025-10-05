@@ -5,6 +5,93 @@
     "version": "1.0"
   },
   "paths": {
+    "/api/Asiento/ObtenerAsientos": {
+      "get": {
+        "tags": [
+          "Asiento"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Asiento"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Asiento"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Asiento"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Asiento/ObtenerAsientosPorZona/{zonaId}": {
+      "get": {
+        "tags": [
+          "Asiento"
+        ],
+        "parameters": [
+          {
+            "name": "zonaId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Asiento"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Asiento"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Asiento"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Auth/VerificarCredenciales": {
       "post": {
         "tags": [
@@ -46,6 +133,92 @@
                 "schema": {
                   "type": "integer",
                   "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Eventos/ObtenerEventos": {
+      "get": {
+        "tags": [
+          "Eventos"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Evento"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Evento"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Evento"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Eventos/CrearEvento": {
+      "post": {
+        "tags": [
+          "Eventos"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Evento"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Evento"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Evento"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Evento"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Evento"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Evento"
                 }
               }
             }
@@ -244,12 +417,11 @@
         }
       }
     },
-    "/WeatherForecast": {
+    "/api/Zonas/ObtenerZonas": {
       "get": {
         "tags": [
-          "WeatherForecast"
+          "Zonas"
         ],
-        "operationId": "GetWeatherForecast",
         "responses": {
           "200": {
             "description": "OK",
@@ -258,7 +430,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/WeatherForecast"
+                    "$ref": "#/components/schemas/Zona"
                   }
                 }
               },
@@ -266,7 +438,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/WeatherForecast"
+                    "$ref": "#/components/schemas/Zona"
                   }
                 }
               },
@@ -274,8 +446,56 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/WeatherForecast"
+                    "$ref": "#/components/schemas/Zona"
                   }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Zonas/CrearZona": {
+      "post": {
+        "tags": [
+          "Zonas"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Zona"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Zona"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Zona"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Zona"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Zona"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Zona"
                 }
               }
             }
@@ -286,6 +506,80 @@
   },
   "components": {
     "schemas": {
+      "Asiento": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "zonaId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "numeroAsiento": {
+            "type": "string",
+            "nullable": true
+          },
+          "estado": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "zona": {
+            "$ref": "#/components/schemas/Zona"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Evento": {
+        "required": [
+          "nombre"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nombre": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "descripcion": {
+            "type": "string",
+            "nullable": true
+          },
+          "fecha": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "hora": {
+            "type": "string",
+            "format": "date-span"
+          },
+          "imagen": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
       "Usuario": {
         "required": [
           "contrasenia",
@@ -330,25 +624,35 @@
         },
         "additionalProperties": false
       },
-      "WeatherForecast": {
+      "Zona": {
+        "required": [
+          "nombre"
+        ],
         "type": "object",
         "properties": {
-          "date": {
-            "type": "string",
-            "format": "date"
-          },
-          "temperatureC": {
+          "id": {
             "type": "integer",
             "format": "int32"
           },
-          "temperatureF": {
-            "type": "integer",
-            "format": "int32",
-            "readOnly": true
+          "nombre": {
+            "minLength": 1,
+            "type": "string"
           },
-          "summary": {
+          "capacidad": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "precio": {
+            "type": "number",
+            "format": "double"
+          },
+          "createdAt": {
             "type": "string",
-            "nullable": true
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
           }
         },
         "additionalProperties": false

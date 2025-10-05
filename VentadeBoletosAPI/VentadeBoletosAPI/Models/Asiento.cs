@@ -27,6 +27,6 @@ namespace VentadeBoletosAPI.Models
 
         // Relaciones
         public Zona? Zona { get; set; }
-        public ICollection<Boleto>? Boletos { get; set; }
+        // public ICollection<Boleto>? Boletos { get; set; }
     }
 }

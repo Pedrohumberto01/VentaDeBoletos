@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "/f9R6hk5epA=",
+  "dgSpecHash": "emCzC4HY3uE=",
   "success": true,
-  "projectFilePath": "C:\\Users\\PEDRO\\Documents\\Repositorio VentaDeBoletos\\VentadeBoletosAPI\\VentadeBoletosAPI\\VentadeBoletosAPI.csproj",
+  "projectFilePath": "C:\\Users\\PEDRO\\Documents\\Repositorio Venta de boletos\\VentaDeBoletos\\VentadeBoletosAPI\\VentadeBoletosAPI\\VentadeBoletosAPI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\PEDRO\\.nuget\\packages\\bouncycastle.cryptography\\2.5.1\\bouncycastle.cryptography.2.5.1.nupkg.sha512",
     "C:\\Users\\PEDRO\\.nuget\\packages\\google.protobuf\\3.30.0\\google.protobuf.3.30.0.nupkg.sha512",
