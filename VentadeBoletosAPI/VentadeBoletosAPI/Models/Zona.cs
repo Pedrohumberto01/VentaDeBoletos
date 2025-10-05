@@ -27,7 +27,7 @@ namespace VentadeBoletosAPI.Models
         public DateTime UpdatedAt { get; set; }
 
         // Relaciones
-        public ICollection<Asiento>? Asientos { get; set; }
-        public ICollection<Boleto>? Boletos { get; set; }
+        // public ICollection<Asiento>? Asientos { get; set; }
+        // public ICollection<Boleto>? Boletos { get; set; }
     }
 }
