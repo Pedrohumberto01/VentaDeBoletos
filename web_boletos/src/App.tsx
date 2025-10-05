@@ -1,13 +1,28 @@
-import { Routes, Route } from 'react-router-dom';
-import Login from './presentation/Login/Login';
+import React from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
+import Layout from "./presentation/layout/Layout";
+import Dashboard from "./presentation/dashboard/Dashboard";
+import Events from "./presentation/events/Events";
 
+// Placeholder para Users (más adelante lo implementan)
+const Users: React.FC = () => (
+  <div>
+    <h2>👥 Usuarios</h2>
+    <p>Vista temporal — aquí se implementará la gestión de usuarios.</p>
+  </div>
+);
 
-function App() {
+const App: React.FC = () => {
   return (
-    <Routes>
-      <Route path="/" element={<Login/>} />
-    </Routes>
+    <Layout>
+      <Routes>
+        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/events" element={<Events />} />
+        <Route path="/users" element={<Users />} />
+      </Routes>
+    </Layout>
   );
-}
+};
 
 export default App;
