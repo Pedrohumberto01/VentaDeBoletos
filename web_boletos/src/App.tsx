@@ -1,9 +1,11 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import Layout from "./presentation/Layout/Layout";
-import Dashboard from "./presentation/dashboard/dashboard";
-import Events from "./presentation/events/Events";
+import Layout from "./presentation/admin/Layout/Layout";
+import Dashboard from "./presentation/admin/dashboard/dashboard";
+import Events from "./presentation/admin/events/Events";
 import Login from "./presentation/Login/Login";
+import DashboardClient from "./presentation/client/Dashboard/DashboardClient";
+import LayoutClient from "./presentation/client/Layout/LayoutClient";
 
 // Componente temporal de Users
 const Users: React.FC = () => (
@@ -25,6 +27,11 @@ const App: React.FC = () => {
         <Route path="/events" element={<Events />} />
         <Route path="/users" element={<Users />} />
       </Route>
+
+      <Route element={<LayoutClient />}>
+        <Route path="/client" element={<DashboardClient />} />
+      </Route>
+
     </Routes>
   );
 };

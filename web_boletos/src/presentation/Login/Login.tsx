@@ -17,6 +17,7 @@ export default function Login() {
       navigate("/dashboard") // 👈 Navega al dashboard
     } else {
       alert("❌ Usuario o contraseña incorrectos")
+      navigate("/client") // 👈 Navega al client
     }
   }
 
