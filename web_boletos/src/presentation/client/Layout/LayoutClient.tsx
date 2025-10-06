@@ -1,9 +1,8 @@
 import React from "react";
 import EventIcon from "@mui/icons-material/Event";
-import StoreIcon from "@mui/icons-material/Store";
-import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import ArticleIcon from "@mui/icons-material/Article";
 import { Outlet } from "react-router-dom";
+import { AccountCircle, Home } from "@mui/icons-material";
 
 const LayoutClient: React.FC = () => {
   return (
@@ -32,6 +31,15 @@ const LayoutClient: React.FC = () => {
                 href="/client"
                 className="flex items-center gap-1 hover:text-blue-600"
               >
+                <Home fontSize="small" />
+                Inicio
+              </a>
+            </li>
+            <li>
+              <a
+                href="/client/eventos"
+                className="flex items-center gap-1 hover:text-blue-600"
+              >
                 <EventIcon fontSize="small" />
                 Eventos
               </a>
@@ -41,26 +49,17 @@ const LayoutClient: React.FC = () => {
                 href="/client"
                 className="flex items-center gap-1 hover:text-blue-600"
               >
-                <StoreIcon fontSize="small" />
-                Productos
-              </a>
-            </li>
-            <li>
-              <a
-                href="/client"
-                className="flex items-center gap-1 hover:text-blue-600"
-              >
-                <LocalOfferIcon fontSize="small" />
-                Promociones
-              </a>
-            </li>
-            <li>
-              <a
-                href="/client"
-                className="flex items-center gap-1 hover:text-blue-600"
-              >
                 <ArticleIcon fontSize="small" />
                 Noticias
+              </a>
+            </li>
+            <li>
+              <a
+                href="/client"
+                className="flex items-center gap-1 hover:text-blue-600"
+              >
+                <AccountCircle fontSize="small" />
+                Registrate
               </a>
             </li>
           </ul>
