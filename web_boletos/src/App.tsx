@@ -1,10 +1,11 @@
 import React from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Layout from "./presentation/Layout/Layout";
 import Dashboard from "./presentation/dashboard/dashboard";
 import Events from "./presentation/events/Events";
+import Login from "./presentation/Login/Login";
 
-// Placeholder para Users (más adelante lo implementan)
+// Componente temporal de Users
 const Users: React.FC = () => (
   <div>
     <h2>👥 Usuarios</h2>
@@ -14,15 +15,18 @@ const Users: React.FC = () => (
 
 const App: React.FC = () => {
   return (
-    <Layout>
-      <Routes>
-        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+    <Routes>
+      {/* Ruta para Login sin el Layout */}
+      <Route path="/" element={<Login />} />
+
+      {/* Rutas protegidas dentro del Layout */}
+      <Route element={<Layout />}>
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/events" element={<Events />} />
         <Route path="/users" element={<Users />} />
-      </Routes>
-    </Layout>
+      </Route>
+    </Routes>
   );
 };
 
-export default App;
+export default App;
