@@ -1,15 +1,20 @@
 import { useState } from "react"
 import type { FormEvent } from "react"
+import { useNavigate } from "react-router-dom"
 
 export default function Login() {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [remember, setRemember] = useState(false)
 
+  const navigate = useNavigate() // 👈 Hook para navegar
+
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+
     if (username === "admin" && password === "1234") {
       alert("✅ Bienvenido al sistema de boletos")
+      navigate("/dashboard") // 👈 Navega al dashboard
     } else {
       alert("❌ Usuario o contraseña incorrectos")
     }
@@ -32,6 +37,7 @@ export default function Login() {
           <h2 className="text-3xl font-bold mb-8 text-center text-blue-500">
             Sign In
           </h2>
+
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Username */}
             <div>

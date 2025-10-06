@@ -15,7 +15,7 @@ import {
   Event as EventIcon,
   People as PeopleIcon,
 } from "@mui/icons-material";
-import { NavLink } from "react-router-dom";
+import { NavLink, Outlet } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -25,13 +25,16 @@ const navItems = [
   { text: "Usuarios", to: "/users", icon: <PeopleIcon /> },
 ];
 
-const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const Layout: React.FC = () => {
   return (
     <Box sx={{ display: "flex" }}>
       {/* Top bar */}
       <AppBar
         position="fixed"
-        sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, backgroundColor: "#1976d2" }}
+        sx={{
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+          backgroundColor: "#1976d2",
+        }}
       >
         <Toolbar>
           <Typography variant="h6" noWrap>
@@ -40,14 +43,17 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         </Toolbar>
       </AppBar>
 
-      {/* Drawer / Sidebar */}
+      {/* Sidebar */}
       <Drawer
         variant="permanent"
         anchor="left"
         sx={{
           width: drawerWidth,
           flexShrink: 0,
-          "& .MuiDrawer-paper": { width: drawerWidth, boxSizing: "border-box" },
+          "& .MuiDrawer-paper": {
+            width: drawerWidth,
+            boxSizing: "border-box",
+          },
         }}
       >
         <Toolbar />
@@ -57,7 +63,6 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
               key={item.to}
               component={NavLink}
               to={item.to}
-              // NavLink agrega la clase "active" cuando la ruta coincide
               sx={{
                 "&.active": {
                   backgroundColor: "rgba(25,118,210,0.08)",
@@ -72,13 +77,13 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         </List>
       </Drawer>
 
-      {/* Main content */}
+      {/* Contenido principal */}
       <Box
         component="main"
         sx={{ flexGrow: 1, bgcolor: "#f4f6f8", minHeight: "100vh", p: 3 }}
       >
-        <Toolbar /> {/* espacio para el AppBar fijo */}
-        {children}
+        <Toolbar /> {/* espacio para el AppBar */}
+        <Outlet /> {/* aquí se renderizan las páginas hijas */}
       </Box>
     </Box>
   );
