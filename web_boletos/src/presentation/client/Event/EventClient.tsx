@@ -1,4 +1,5 @@
 
+import { Link } from "react-router-dom";
 import eventChampions from "../../../assets/event_champions.jpg";
 import eventClasic from "../../../assets/event_clasicmlb.jpg";
 import eventLBPN from "../../../assets/event_lbpn.png";
@@ -62,31 +63,32 @@ export default function EventClient() {
   return (
     <div className="p-6 grid md:grid-cols-3 sm:grid-cols-2 gap-6">
       {eventos.map((evento) => (
-        <div
-          key={evento.id}
-          className="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
-        >
-          <img
-            src={evento.imagen}
-            alt={evento.nombre}
-            className="w-full h-48 object-cover"
-          />
-          <div className="p-4">
-            <h2 className="text-xl font-bold mb-2">{evento.nombre}</h2>
-            <p className="text-gray-600 text-sm mb-2">
-              {evento.descripcion.length > 100
-                ? evento.descripcion.substring(0, 100) + "..."
-                : evento.descripcion}
-            </p>
-            <p className="text-gray-800 font-medium">
-              Fecha: {new Date(evento.fecha).toLocaleDateString()}
-            </p>
-            <p className="text-gray-800 font-medium">
-              Hora: {evento.hora}
-            </p>
-          </div>
-        </div>
-      ))}
+  <Link
+    to={`/client/MostrarMapaEvento/${evento.id}`} 
+    key={evento.id}
+  >
+    <div className="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+      <img
+        src={evento.imagen}
+        alt={evento.nombre}
+        className="w-full h-48 object-cover"
+      />
+      <div className="p-4">
+        <h2 className="text-xl font-bold mb-2">{evento.nombre}</h2>
+        <p className="text-gray-600 text-sm mb-2">
+          {evento.descripcion.length > 100
+            ? evento.descripcion.substring(0, 100) + "..."
+            : evento.descripcion}
+        </p>
+        <p className="text-gray-800 font-medium">
+          Fecha: {new Date(evento.fecha).toLocaleDateString()}
+        </p>
+        <p className="text-gray-800 font-medium">{evento.hora}</p>
+      </div>
+    </div>
+  </Link>
+))}
+
     </div>
   );
 }
