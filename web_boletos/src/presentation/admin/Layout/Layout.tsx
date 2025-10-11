@@ -23,6 +23,7 @@ const navItems = [
   { text: "Panel", to: "/dashboard", icon: <DashboardIcon /> },
   { text: "Eventos", to: "/events", icon: <EventIcon /> },
   { text: "Usuarios", to: "/users", icon: <PeopleIcon /> },
+  { text: "Cerrar Sesión", to: "/", icon: <PeopleIcon /> },
 ];
 
 const Layout: React.FC = () => {
