@@ -8,6 +8,7 @@ import DashboardClient from "./presentation/client/Dashboard/DashboardClient";
 import LayoutClient from "./presentation/client/Layout/LayoutClient";
 import EventClient from "./presentation/client/Event/EventClient";
 import MapForEvent from "./presentation/client/Map/MapForEvent";
+import PagoBoletos from "./presentation/client/Pago/PagoBoletos";
 
 // Componente temporal de Users
 const Users: React.FC = () => (
@@ -34,7 +35,7 @@ const App: React.FC = () => {
         <Route path="/client" element={<DashboardClient />} />
         <Route path="/client/eventos" element={<EventClient />} />
         <Route path="/client/MostrarMapaEvento/:id" element={<MapForEvent />} />
-        <Route path="/client/procesar_pago" element={<DashboardClient />} />
+        <Route path="/client/procesar_pago" element={<PagoBoletos />} />
       </Route>
 
     </Routes>

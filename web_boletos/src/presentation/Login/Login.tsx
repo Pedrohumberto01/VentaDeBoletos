@@ -15,8 +15,8 @@ export default function Login() {
     if (username === "admin" && password === "1234") {
       alert("✅ Bienvenido al sistema de boletos")
       navigate("/dashboard") // 👈 Navega al dashboard
-    } else {
-      alert("❌ Usuario o contraseña incorrectos")
+    } 
+    if (username === "cliente" && password === "1234"){
       navigate("/client") // 👈 Navega al client
     }
   }
