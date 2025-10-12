@@ -1,94 +1,68 @@
-
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import eventChampions from "../../../assets/event_champions.jpg";
-import eventClasic from "../../../assets/event_clasicmlb.jpg";
-import eventLBPN from "../../../assets/event_lbpn.png";
-import eventOpening from "../../../assets/event_opening.jpg";
-import eventSuperHero from "../../../assets/event_superhero.jpg";
-import eventWorldSeries from "../../../assets/event_worldseries.jpg";
 
-// Simulación de datos que vendrían de tu API
-const eventos = [
-  {
-    id: 1,
-    nombre: "Gran evento de los champions",
-    descripcion: "Gran concierto de rock con bandas nacionales e internacionales.",
-    fecha: "2025-10-20",
-    hora: "19:00:00",
-    imagen: eventChampions,
-  },
-  {
-    id: 2,
-    nombre: "Disfruta de un clasico",
-    descripcion: "Final del torneo local en nuestro estadio.",
-    fecha: "2025-10-25",
-    hora: "17:00:00",
-    imagen: eventClasic,
-  },
-  {
-    id: 3,
-    nombre: "Envuelvete en la nueva liga de LBNP",
-    descripcion: "Disfruta de un día lleno de música y diversión para toda la familia.",
-    fecha: "2025-11-05",
-    hora: "12:00:00",
-    imagen: eventLBPN,
-  },
-  {
-    id: 4,
-    nombre: "Disfruta el opening day de este año",
-    descripcion: "Disfruta de un día lleno de música y diversión para toda la familia.",
-    fecha: "2025-11-05",
-    hora: "12:00:00",
-    imagen: eventOpening,
-  },
-  {
-    id: 5,
-    nombre: "Festival de Superheroes",
-    descripcion: "Disfruta de un día lleno de música y diversión para toda la familia.",
-    fecha: "2025-11-05",
-    hora: "12:00:00",
-    imagen: eventSuperHero,
-  },
-  {
-    id: 6,
-    nombre: "Las world series estan aqui",
-    descripcion: "Disfruta de un día lleno de música y diversión para toda la familia.",
-    fecha: "2025-11-05",
-    hora: "12:00:00",
-    imagen: eventWorldSeries,
-  },
-];
+
+import eventChampions from "../../../assets/event_champions.jpg";
+
 
 export default function EventClient() {
-  return (
+  // Estado para guardar los eventos
+  const [eventos, setEventos] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Función para obtener eventos desde la API
+  const ObtenerEventos = async () => {
+    try {
+      const response = await fetch("https://localhost:7082/api/Eventos/ObtenerEventos");
+      if (!response.ok) throw new Error("Error al obtener eventos");
+      const data = await response.json();
+      setEventos(data);
+    } catch (err: any) {
+      console.error("Error al obtener eventos:", err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    ObtenerEventos();
+  }, []);
+
+  if (loading) return <p className="p-6">Cargando eventos...</p>;
+  if (error) return <p className="p-6 text-red-500">Error: {error}</p>;
+
+  return (<>
+    <h1 className="text-3xl font-bold text-center text-gray-800 mb-2">
+        Seleccione el evento de su preferencia
+    </h1>
+
     <div className="p-6 grid md:grid-cols-3 sm:grid-cols-2 gap-6">
       {eventos.map((evento) => (
-  <Link
-    to={`/client/MostrarMapaEvento/${evento.id}`} 
-    key={evento.id}
-  >
-    <div className="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
-      <img
-        src={evento.imagen}
-        alt={evento.nombre}
-        className="w-full h-48 object-cover"
-      />
-      <div className="p-4">
-        <h2 className="text-xl font-bold mb-2">{evento.nombre}</h2>
-        <p className="text-gray-600 text-sm mb-2">
-          {evento.descripcion.length > 100
-            ? evento.descripcion.substring(0, 100) + "..."
-            : evento.descripcion}
-        </p>
-        <p className="text-gray-800 font-medium">
-          Fecha: {new Date(evento.fecha).toLocaleDateString()}
-        </p>
-        <p className="text-gray-800 font-medium">{evento.hora}</p>
-      </div>
+        <Link key={evento.id} to={`/client/MostrarMapaEvento/${evento.id}`}>
+          <div className="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+            <img
+              //src={evento.imagen} // si quieres usar imágenes locales fallback, podemos agregarlo
+              src={eventChampions}
+              alt={evento.nombre}
+              className="w-full h-48 object-cover"
+            />
+            <div className="p-4">
+              <h2 className="text-xl font-bold mb-2">{evento.nombre}</h2>
+              <p className="text-gray-600 text-sm mb-2">
+                {evento.descripcion.length > 100
+                  ? evento.descripcion.substring(0, 100) + "..."
+                  : evento.descripcion}
+              </p>
+              <p className="text-gray-800 font-medium">
+                Fecha: {new Date(evento.fecha).toLocaleDateString()}
+              </p>
+              <p className="text-gray-800 font-medium">{evento.hora}</p>
+            </div>
+          </div>
+        </Link>
+      ))}
     </div>
-  </Link>
-))}
-
-    </div>
-  );
+  </>);
 }
