@@ -6,55 +6,65 @@ import EventSeatIcon from "@mui/icons-material/EventSeat";
 export default function MostrarMapaEvento() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [zonaSeleccionada, setZonaSeleccionada] = useState<string>("");
-  const [asientosSeleccionados, setAsientosSeleccionados] = useState<number[]>([]);
-  const [asientosOcupados, setAsientosOcupados] = useState<number[]>([]);
 
-  // 🔹 Configuración de zonas
-  const zonas = {
-    "1": { nombre: "Jardín", filas: 4, columnas: 10 },
-    "2": { nombre: "VIP", filas: 3, columnas: 6 },
-    "3": { nombre: "Mezanine terreno", filas: 5, columnas: 8 },
-    "4": { nombre: "HomePlate", filas: 4, columnas: 12 },
-    "5": { nombre: "Mezzanine HomePlate", filas: 3, columnas: 10 },
-    "6": { nombre: "Palco", filas: 2, columnas: 5 },
+  const [zonas, setZonas] = useState<any[]>([]);
+  const [zonaSeleccionada, setZonaSeleccionada] = useState<string>("");
+  const [asientos, setAsientos] = useState<any[]>([]);
+  const [asientosSeleccionados, setAsientosSeleccionados] = useState<number[]>([]);
+
+  // 🔹 Traer zonas desde la API
+  const traerZonas = async () => {
+    try {
+      const response = await fetch("https://localhost:7082/api/Zonas/ObtenerZonas");
+      const data = await response.json();
+      setZonas(data);
+    } catch (error) {
+      console.error("Error al traer zonas:", error);
+    }
   };
 
-  const zonaActual = zonas[zonaSeleccionada as keyof typeof zonas];
-
-  // 🔸 Generar asientos ocupados simulados
-  useEffect(() => {
-    if (zonaActual) {
-      const total = zonaActual.filas * zonaActual.columnas;
-      const cantidadOcupados = Math.floor(total * 0.2);
-      const ocupados = new Set<number>();
-      while (ocupados.size < cantidadOcupados) {
-        ocupados.add(Math.floor(Math.random() * total));
-      }
-      setAsientosOcupados([...ocupados]);
-      setAsientosSeleccionados([]);
+  // 🔹 Traer asientos desde la API
+  const traerAsientos = async () => {
+    try {
+      const response = await fetch("https://localhost:7082/api/Asiento/ObtenerAsientos");
+      const data = await response.json();
+      setAsientos(data);
+    } catch (error) {
+      console.error("Error al traer asientos:", error);
     }
-  }, [zonaSeleccionada]);
+  };
 
-  // 🔸 Alternar selección
-  const toggleAsiento = (index: number) => {
-    if (asientosOcupados.includes(index)) return;
+  // 🔹 Cargar datos al inicio
+  useEffect(() => {
+    traerZonas();
+    traerAsientos();
+  }, []);
+
+  // 🔹 Filtrar asientos de la zona seleccionada
+  const asientosZona = zonaSeleccionada
+    ? asientos.filter((a) => a.zonaId === parseInt(zonaSeleccionada))
+    : [];
+
+  // 🔹 Alternar selección
+  const toggleAsiento = (idAsiento: number, estado: string) => {
+    if (estado !== "disponible") return; // no se puede seleccionar reservado/vendido
 
     setAsientosSeleccionados((prev) =>
-      prev.includes(index)
-        ? prev.filter((i) => i !== index)
-        : [...prev, index]
+      prev.includes(idAsiento)
+        ? prev.filter((i) => i !== idAsiento)
+        : [...prev, idAsiento]
     );
   };
 
-  // 🔸 Ir a la vista de pago
+  // 🔹 Ir a la vista de pago
   const irAPago = () => {
-    if (zonaActual && asientosSeleccionados.length > 0) {
+    if (zonaSeleccionada && asientosSeleccionados.length > 0) {
+      const zona = zonas.find((z) => z.id === parseInt(zonaSeleccionada));
       navigate("/client/procesar_pago", {
         state: {
           eventoId: id,
-          zona: zonaActual.nombre,
-          boletos: asientosSeleccionados.map((a) => a + 1),
+          zona: zona?.nombre,
+          boletos: asientosSeleccionados,
         },
       });
     }
@@ -78,7 +88,7 @@ export default function MostrarMapaEvento() {
       {/* 📋 Información del evento */}
       <div className="bg-white shadow-md rounded-lg p-4">
         <h2 className="text-xl font-bold mb-2 text-blue-700">
-          🎟️ Evento seleccionado
+          🎟️ Selección de zona
         </h2>
         <p className="text-gray-700 mb-3">Seleccione la zona de su preferencia:</p>
 
@@ -88,60 +98,51 @@ export default function MostrarMapaEvento() {
           id="zona"
           className="border border-gray-300 rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
           value={zonaSeleccionada}
-          onChange={(e) => setZonaSeleccionada(e.target.value)}
+          onChange={(e) => {
+            setZonaSeleccionada(e.target.value);
+            setAsientosSeleccionados([]); // reset
+          }}
         >
           <option value="">-- Seleccione una zona --</option>
-          {Object.entries(zonas).map(([id, z]) => (
-            <option key={id} value={id}>
-              {z.nombre}
+          {zonas.map((z) => (
+            <option key={z.id} value={z.id}>
+              {z.nombre} — ${z.precio}
             </option>
           ))}
         </select>
 
         {/* Panel dinámico de asientos */}
-        {zonaActual && (
+        {zonaSeleccionada && (
           <div className="mt-6 p-4 border rounded-lg bg-gray-50">
             <h3 className="text-lg font-semibold text-gray-800 mb-3">
-              Zona seleccionada: {zonaActual.nombre}
+              Zona seleccionada: {zonas.find((z) => z.id === parseInt(zonaSeleccionada))?.nombre}
             </h3>
-            <p className="text-gray-600 mb-3">
-              Distribución de asientos ({zonaActual.filas} filas ×{" "}
-              {zonaActual.columnas} columnas)
-            </p>
 
-            <div
-              className="grid gap-1 justify-center"
-              style={{
-                gridTemplateColumns: `repeat(${zonaActual.columnas}, 1fr)`,
-              }}
-            >
-              {Array.from({
-                length: zonaActual.filas * zonaActual.columnas,
-              }).map((_, i) => {
-                const seleccionado = asientosSeleccionados.includes(i);
-                const ocupado = asientosOcupados.includes(i);
+            <div className="grid grid-cols-5 gap-2 justify-center">
+              {asientosZona.map((asiento) => {
+                const seleccionado = asientosSeleccionados.includes(asiento.id);
+                const estado = asiento.estado.toLowerCase();
 
                 // 🎨 Colores según estado
-                let color = "#22c55e"; // verde
-                if (ocupado) color = "#ef4444"; // rojo
-                else if (seleccionado) color = "#3b82f6"; // azul
+                let color = "#22c55e"; // disponible (verde)
+                if (estado === "reservado") color = "#f59e0b"; // amarillo
+                else if (estado === "vendido") color = "#ef4444"; // rojo
+                else if (seleccionado) color = "#3b82f6"; // azul (seleccionado)
 
                 return (
                   <button
-                    key={i}
-                    onClick={() => toggleAsiento(i)}
-                    disabled={ocupado}
+                    key={asiento.id}
+                    onClick={() => toggleAsiento(asiento.id, asiento.estado)}
+                    disabled={estado !== "disponible"}
                     className="flex items-center justify-center"
-                    title={`Asiento ${i + 1}${
-                      ocupado ? " (Ocupado)" : seleccionado ? " (Seleccionado)" : ""
-                    }`}
+                    title={`Asiento ${asiento.numeroAsiento} (${estado})`}
                   >
                     <EventSeatIcon
                       style={{
                         color: color,
-                        fontSize: "3rem",
-                        opacity: ocupado ? 0.6 : 1,
-                        cursor: ocupado ? "not-allowed" : "pointer",
+                        fontSize: "2.5rem",
+                        opacity: estado !== "disponible" ? 0.6 : 1,
+                        cursor: estado !== "disponible" ? "not-allowed" : "pointer",
                         transition: "transform 0.15s ease",
                       }}
                     />
@@ -155,7 +156,10 @@ export default function MostrarMapaEvento() {
               <div className="mt-4">
                 <p className="text-sm text-gray-700 mb-3">
                   Asientos seleccionados:{" "}
-                  {asientosSeleccionados.map((a) => a + 1).join(", ")}
+                  {asientosZona
+                    .filter((a) => asientosSeleccionados.includes(a.id))
+                    .map((a) => a.numeroAsiento)
+                    .join(", ")}
                 </p>
 
                 <button
