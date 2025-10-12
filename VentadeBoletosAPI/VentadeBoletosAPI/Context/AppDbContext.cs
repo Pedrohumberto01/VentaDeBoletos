@@ -17,17 +17,14 @@ namespace VentadeBoletosAPI.Context
         public DbSet<Boleto> Boletos { get; set; }
         public DbSet<Pago> Pagos { get; set; }
 
+        public DbSet<RolResult> RolResult { get; set; }
 
-        // Métodos para llamar a funciones almacenadas 
-        public async Task<int> VerificarCredencialesAsync(string email, string contrasenia)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            var result = await Database.SqlQueryRaw<int>(
-                $"SELECT VerificarCredenciales('{{0}}', '{{1}}');",
-                parameters: new object[] { email, contrasenia }
-            ).ToListAsync();
+            base.OnModelCreating(modelBuilder);
 
-            return result.FirstOrDefault();
+            // 👇 Muy importante: indicar que RolResult NO tiene clave primaria
+            modelBuilder.Entity<RolResult>().HasNoKey();
         }
-
     }
 }

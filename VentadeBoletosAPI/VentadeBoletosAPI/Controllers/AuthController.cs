@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MySqlConnector;
 using VentadeBoletosAPI.Context;
+using VentadeBoletosAPI.Models;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -14,14 +16,30 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("VerificarCredenciales")]
-    public async Task<int> VerificarCredencialesAsync(string email, string contrasenia)
+    public async Task<ActionResult<string>> VerificarCredencialesAsync([FromBody] CredencialesRequest request)
     {
-        var result = await _context.Usuarios
-            .FromSqlInterpolated($"SELECT VerificarCredenciales({email}, {contrasenia}) as Id")
-            .Select(u => u.Id)
-            .FirstOrDefaultAsync();
+        try
+        {
+            var result = await _context.RolResult
+                .FromSqlRaw(
+                    "SELECT VerificarCredenciales(@email, @contrasenia) AS Rol",
+                    new MySqlParameter("@email", request.Email),
+                    new MySqlParameter("@contrasenia", request.Contrasenia)
+                )
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
 
-        return result;
+            return Ok(result?.Rol ?? "no_existe");
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+        }
     }
+}
 
+public class CredencialesRequest
+{
+    public string Email { get; set; }
+    public string Contrasenia { get; set; }
 }
