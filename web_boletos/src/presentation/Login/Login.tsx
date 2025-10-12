@@ -1,30 +1,71 @@
-import { useState } from "react"
-import type { FormEvent } from "react"
-import { useNavigate } from "react-router-dom"
+import { useState, type FormEvent } from "react";
+import { useNavigate } from "react-router-dom";
+import Modal from "../modal/Modal"; // 🔹 Importa el modal
 
 export default function Login() {
-  const [username, setUsername] = useState("")
-  const [password, setPassword] = useState("")
-  const [remember, setRemember] = useState(false)
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [remember, setRemember] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  
 
-  const navigate = useNavigate() // 👈 Hook para navegar
+  const navigate = useNavigate();
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-    if (username === "admin" && password === "1234") {
-      alert("✅ Bienvenido al sistema de boletos")
-      navigate("/dashboard") // 👈 Navega al dashboard
-    } 
-    if (username === "cliente" && password === "1234"){
-      navigate("/client") // 👈 Navega al client
+    const datos = { email: username, contrasenia: password };
+
+    try {
+      const response = await fetch(
+        "https://localhost:7082/api/Auth/VerificarCredenciales",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            accept: "text/plain",
+          },
+          body: JSON.stringify(datos),
+        }
+      );
+
+      if (!response.ok) throw new Error(`Error en la petición: ${response.status}`);
+
+      const resultado = await response.text();
+
+      // Mostrar modal según respuesta
+      switch (resultado) {
+        case "admin":
+          setModalMessage("✅ Bienvenido al sistema de boletos");
+          setShowModal(true);
+          setTimeout(() => navigate("/dashboard"), 1500); // redirige después de 1.5s
+          break;
+        case "cliente":
+          setModalMessage("✅ Bienvenido Cliente");
+          setShowModal(true);
+          setTimeout(() => navigate("/client"), 1500);
+          break;
+        case "no_existe":
+          setModalMessage("❌ Usuario o contraseña incorrectos");
+          setShowModal(true);
+          break;
+        default:
+          setModalMessage("❌ Error desconocido");
+          setShowModal(true);
+          break;
+      }
+    } catch (error) {
+      console.error("Error al verificar credenciales:", error);
+      setModalMessage("❌ Error al conectar con el servidor");
+      setShowModal(true);
     }
-  }
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4">
       <div className="bg-white rounded-3xl shadow-lg flex max-w-4xl w-full overflow-hidden">
-        {/* Imagen de béisbol */}
+        {/* Imagen */}
         <div className="hidden md:block md:w-1/2">
           <img
             src="https://www.el19digital.com/files/articulos/381504.jpg"
@@ -35,12 +76,9 @@ export default function Login() {
 
         {/* Formulario */}
         <div className="w-full md:w-1/2 p-10">
-          <h2 className="text-3xl font-bold mb-8 text-center text-blue-500">
-            Sign In
-          </h2>
+          <h2 className="text-3xl font-bold mb-8 text-center text-blue-500">Sign In</h2>
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Username */}
             <div>
               <label className="block text-sm font-medium mb-1">Username</label>
               <input
@@ -53,7 +91,6 @@ export default function Login() {
               />
             </div>
 
-            {/* Password */}
             <div>
               <label className="block text-sm font-medium mb-1">Password</label>
               <input
@@ -66,7 +103,6 @@ export default function Login() {
               />
             </div>
 
-            {/* Remember Me */}
             <div className="flex items-center space-x-2">
               <input
                 type="checkbox"
@@ -80,29 +116,22 @@ export default function Login() {
               </label>
             </div>
 
-            {/* Botón Sign In */}
             <button
               type="submit"
               className="w-full bg-blue-500 text-white py-3 rounded-xl font-semibold hover:bg-blue-600 transition"
             >
               Sign In
             </button>
-
-            {/* Enlaces de ayuda y registro */}
-            <div className="flex flex-col items-center mt-4 text-sm text-gray-600 space-y-1">
-              <a href="#" className="hover:underline">
-                Need help signing in?
-              </a>
-              <span>
-                Don't have an account?{" "}
-                <a href="#" className="text-blue-500 hover:underline">
-                  Sign up
-                </a>
-              </span>
-            </div>
           </form>
         </div>
       </div>
+
+      {/* Modal */}
+      <Modal
+        show={showModal}
+        message={modalMessage}
+        onClose={() => setShowModal(false)}
+      />
     </div>
-  )
+  );
 }
