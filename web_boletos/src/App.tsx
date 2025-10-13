@@ -11,6 +11,8 @@ import MapForEvent from "./presentation/client/Map/MapForEvent";
 import PagoBoletos from "./presentation/client/Pago/PagoBoletos";
 import UsuarioComponent from "./presentation/admin/Users/Usuarios";
 import ZonasComponent from "./presentation/admin/Zones/Zona";
+import VenderManualmente from "./presentation/admin/Store/Store";
+import PagoBoletosEfectivo from "./presentation/admin/Payment/PagoBoletos";
 
 const Reports: React.FC = () => (
   <div>
@@ -40,6 +42,8 @@ const App: React.FC = () => {
         <Route path="/zones" element={<ZonasComponent />} />
         <Route path="/reports" element={<Reports />} />
         <Route path="/payment-history" element={<PaymentHistory />} />
+        <Route path="/VenderManualmente" element={<VenderManualmente />} />
+        <Route path="/pagoBoletos" element={<PagoBoletosEfectivo />} />
       </Route>
 
       <Route element={<LayoutClient />}>
