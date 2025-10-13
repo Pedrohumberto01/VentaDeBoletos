@@ -18,6 +18,27 @@ const Users: React.FC = () => (
   </div>
 );
 
+const Reports: React.FC = () => (
+  <div>
+    <h2>� Reportes</h2>
+    <p>Vista temporal — aquí se implementará la gestión de reportes.</p>
+  </div>
+);
+
+const Zones: React.FC = () => (
+  <div>
+    <h2>👥 Zonas</h2>
+    <p>Vista temporal — aquí se implementará la gestión de usuarios.</p>
+  </div>
+);
+
+const PaymentHistory: React.FC = () => (
+  <div>
+    <h2>👥 Payment history</h2>
+    <p>Vista temporal — aquí se implementará la gestión de usuarios.</p>
+  </div>
+);
+
 const App: React.FC = () => {
   return (
     <Routes>
@@ -29,6 +50,9 @@ const App: React.FC = () => {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/events" element={<Events />} />
         <Route path="/users" element={<Users />} />
+        <Route path="/zones" element={<Zones />} />
+        <Route path="/reports" element={<Reports />} />
+        <Route path="/payment-history" element={<PaymentHistory />} />
       </Route>
 
       <Route element={<LayoutClient />}>
