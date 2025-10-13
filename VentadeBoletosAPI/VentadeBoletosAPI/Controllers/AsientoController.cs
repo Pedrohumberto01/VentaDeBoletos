@@ -36,5 +36,14 @@ namespace VentadeBoletosAPI.Controllers
 
             return Ok(asientos);
         }
+
+        [HttpPut("CambiarEstado/{id}")]
+        public async Task<IActionResult> PutAsiento(int id, Asiento asiento)
+        {
+            if (id != asiento.Id) return BadRequest();
+            _context.Entry(asiento).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
     }
 }

@@ -33,16 +33,8 @@ namespace VentadeBoletosAPI.Models
         public string? CodigoQR { get; set; }
 
         [Column("created_at")]
-        public DateTime CreatedAt { get; set; }
-
+        public DateTime Created_At { get; set; } = DateTime.UtcNow;
         [Column("updated_at")]
-        public DateTime UpdatedAt { get; set; }
-
-        // Relaciones
-        public Usuario? Usuario { get; set; }
-        public Evento? Evento { get; set; }
-        public Zona? Zona { get; set; }
-        public Asiento? Asiento { get; set; }
-        public ICollection<Pago>? Pagos { get; set; }
+        public DateTime Updated_At { get; set; } = DateTime.UtcNow;
     }
 }
