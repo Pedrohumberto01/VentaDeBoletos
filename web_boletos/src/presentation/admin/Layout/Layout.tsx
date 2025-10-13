@@ -31,7 +31,7 @@ const navItems = [
   { text: "Zonas", to: "/zones", icon: <Settings /> },
   { text: "Reportes", to: "/reports", icon: <AssessmentOutlined /> },
   { text: "Historial de pagos", to: "/payment-history", icon: <History /> },
-  { text: "Vender manualmente", to: "/", icon: <AddBusinessTwoTone />, hidden: true },
+  { text: "Vender manualmente", to: "/VenderManualmente", icon: <AddBusinessTwoTone /> },
   { text: "Cerrar Sesión", to: "/", icon: <Logout /> },
 ];
 
