@@ -9,26 +9,13 @@ import LayoutClient from "./presentation/client/Layout/LayoutClient";
 import EventClient from "./presentation/client/Event/EventClient";
 import MapForEvent from "./presentation/client/Map/MapForEvent";
 import PagoBoletos from "./presentation/client/Pago/PagoBoletos";
-
-// Componente temporal de Users
-const Users: React.FC = () => (
-  <div>
-    <h2>👥 Usuarios</h2>
-    <p>Vista temporal — aquí se implementará la gestión de usuarios.</p>
-  </div>
-);
+import UsuarioComponent from "./presentation/admin/Users/Usuarios";
+import ZonasComponent from "./presentation/admin/Zones/Zona";
 
 const Reports: React.FC = () => (
   <div>
     <h2>� Reportes</h2>
     <p>Vista temporal — aquí se implementará la gestión de reportes.</p>
-  </div>
-);
-
-const Zones: React.FC = () => (
-  <div>
-    <h2>👥 Zonas</h2>
-    <p>Vista temporal — aquí se implementará la gestión de usuarios.</p>
   </div>
 );
 
@@ -49,8 +36,8 @@ const App: React.FC = () => {
       <Route element={<Layout />}>
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/events" element={<Events />} />
-        <Route path="/users" element={<Users />} />
-        <Route path="/zones" element={<Zones />} />
+        <Route path="/users" element={<UsuarioComponent />} />
+        <Route path="/zones" element={<ZonasComponent />} />
         <Route path="/reports" element={<Reports />} />
         <Route path="/payment-history" element={<PaymentHistory />} />
       </Route>
