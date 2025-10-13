@@ -11,9 +11,14 @@ import {
   Typography,
 } from "@mui/material";
 import {
+  AssessmentOutlined,
   Dashboard as DashboardIcon,
   Event as EventIcon,
+  Logout,
   People as PeopleIcon,
+  Settings,
+  History,
+  AddBusinessTwoTone,
 } from "@mui/icons-material";
 import { NavLink, Outlet } from "react-router-dom";
 
@@ -23,7 +28,11 @@ const navItems = [
   { text: "Panel", to: "/dashboard", icon: <DashboardIcon /> },
   { text: "Eventos", to: "/events", icon: <EventIcon /> },
   { text: "Usuarios", to: "/users", icon: <PeopleIcon /> },
-  { text: "Cerrar Sesión", to: "/", icon: <PeopleIcon /> },
+  { text: "Zonas", to: "/zones", icon: <Settings /> },
+  { text: "Reportes", to: "/reports", icon: <AssessmentOutlined /> },
+  { text: "Historial de pagos", to: "/payment-history", icon: <History /> },
+  { text: "Vender manualmente", to: "/", icon: <AddBusinessTwoTone />, hidden: true },
+  { text: "Cerrar Sesión", to: "/", icon: <Logout /> },
 ];
 
 const Layout: React.FC = () => {
