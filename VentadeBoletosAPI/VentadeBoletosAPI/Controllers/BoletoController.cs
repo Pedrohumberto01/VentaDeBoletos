@@ -16,6 +16,30 @@ namespace VentadeBoletosAPI.Controllers
             _context = context;
         }
 
+        [HttpPost("GenararQR")]
+        public async Task<IActionResult> GenerarQR([FromBody] int boletoId)
+        {
+            Boleto boleto = await _context.Boletos.FindAsync(boletoId);
+            if (boleto == null)
+                return NotFound("Boleto no encontrado");
+
+
+            var qrCode = boleto.CodigoQR;
+            //Generar QR con la data de qrCode
+
+
+
+            
+
+
+            //si todo sale bien retornar
+            return Ok(new
+            {
+                mensaje = "QR Generado correctamente",
+                qrCode
+            });
+        }
+
         // 🔹 POST: api/Boleto/Generar
         [HttpPost("Generar")]
         public async Task<IActionResult> GenerarBoletos([FromBody] GenerarBoletosRequest request)
@@ -57,7 +81,7 @@ namespace VentadeBoletosAPI.Controllers
                 return Ok(new
                 {
                     mensaje = "Boletos generados exitosamente",
-                    boletos
+                    boletos 
                 });
             }
             catch (Exception ex)
