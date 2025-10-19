@@ -16,6 +16,7 @@ namespace VentadeBoletosAPI.Context
         public DbSet<Asiento> Asientos { get; set; }
         public DbSet<Boleto> Boletos { get; set; }
         public DbSet<Pago> Pagos { get; set; }
+        public DbSet<PagoBoleto> PagoBoletos { get; set; }
 
         public DbSet<RolResult> RolResult { get; set; }
 
@@ -25,6 +26,21 @@ namespace VentadeBoletosAPI.Context
 
             // 👇 Muy importante: indicar que RolResult NO tiene clave primaria
             modelBuilder.Entity<RolResult>().HasNoKey();
+
+            modelBuilder.Entity<PagoBoleto>()
+               .HasKey(pb => pb.Id);
+
+            modelBuilder.Entity<PagoBoleto>()
+                .HasOne(pb => pb.Pago)
+                .WithMany(p => p.PagoBoletos)
+                .HasForeignKey(pb => pb.PagoId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<PagoBoleto>()
+                .HasOne(pb => pb.Boleto)
+                .WithMany(b => b.PagoBoletos)
+                .HasForeignKey(pb => pb.BoletoId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

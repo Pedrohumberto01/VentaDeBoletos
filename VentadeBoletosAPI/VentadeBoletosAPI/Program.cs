@@ -7,6 +7,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Obtiene la cadena de conexión
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
+var stripeSettings = builder.Configuration.GetSection("Stripe");
+Stripe.StripeConfiguration.ApiKey = stripeSettings["SecretKey"];
+
 // Registrar DbContext con MySQL
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));

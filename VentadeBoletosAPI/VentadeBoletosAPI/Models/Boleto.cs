@@ -36,5 +36,6 @@ namespace VentadeBoletosAPI.Models
         public DateTime Created_At { get; set; } = DateTime.UtcNow;
         [Column("updated_at")]
         public DateTime Updated_At { get; set; } = DateTime.UtcNow;
+        public ICollection<PagoBoleto>? PagoBoletos { get; set; }
     }
 }

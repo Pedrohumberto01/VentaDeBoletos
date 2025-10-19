@@ -1,23 +1,18 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace VentadeBoletosAPI.Models
 {
-    [Table("pagos")]
     public class Pago
     {
-        [Key]
-        [Column("id")]
         public int Id { get; set; }
-
-        [Column("boleto_id")]
-        public int BoletoId { get; set; }
 
         [Column("monto")]
         public decimal Monto { get; set; }
 
         [Column("metodo_pago")]
-        public string MetodoPago { get; set; } = null!;
+        public string MetodoPago { get; set; } = string.Empty;
 
         [Column("estado_pago")]
         public string EstadoPago { get; set; } = "pendiente";
@@ -25,7 +20,7 @@ namespace VentadeBoletosAPI.Models
         [Column("fecha_pago")]
         public DateTime FechaPago { get; set; }
 
-        // Relaciones
-        public Boleto? Boleto { get; set; }
+        // Relación: un pago puede tener varios boletos
+        public ICollection<PagoBoleto>? PagoBoletos { get; set; }
     }
 }
