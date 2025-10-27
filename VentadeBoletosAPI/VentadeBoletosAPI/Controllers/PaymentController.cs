@@ -28,7 +28,7 @@ namespace VentadeBoletosAPI.Controllers
             if (request == null || !request.BoletosIds.Any())
                 return BadRequest("Solicitud inválida.");
 
-            var totalCentavos = (long)(request.Monto * 100);
+            var totalCentavos = (long)((request.Monto / 37) * 100);
 
             var domain = $"{Request.Scheme}://{Request.Host}";
             var options = new SessionCreateOptions
@@ -109,7 +109,7 @@ namespace VentadeBoletosAPI.Controllers
 
             await _context.SaveChangesAsync();
 
-            return Ok(new { sessionId = session.Id });
+            return Ok(new { url = session.Url });
         }
 
         // 🔹 2️⃣ WEBHOOK STRIPE (confirmación automática)
