@@ -64,6 +64,7 @@ export default function MostrarMapaEvento() {
         state: {
           eventoId: id,
           zona: zona?.nombre,
+          precio: zona?.precio,
           boletos: asientosSeleccionados,
         },
       });
