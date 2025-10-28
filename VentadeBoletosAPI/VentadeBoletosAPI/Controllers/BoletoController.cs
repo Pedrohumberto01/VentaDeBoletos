@@ -73,6 +73,7 @@ namespace VentadeBoletosAPI.Controllers
                         asiento.Estado = "vendido";
                         _context.Asientos.Update(asiento);
                     }
+
                 }
 
                 await _context.Boletos.AddRangeAsync(boletos);
