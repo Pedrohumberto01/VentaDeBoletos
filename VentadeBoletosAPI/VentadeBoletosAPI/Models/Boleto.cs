@@ -22,6 +22,7 @@ namespace VentadeBoletosAPI.Models
 
         [Column("asiento_id")]
         public int? AsientoId { get; set; }
+        public Asiento? Asiento { get; set; }
 
         [Column("precio")]
         public decimal Precio { get; set; }
