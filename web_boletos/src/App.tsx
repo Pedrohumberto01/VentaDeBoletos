@@ -13,20 +13,10 @@ import UsuarioComponent from "./presentation/admin/Users/Usuarios";
 import ZonasComponent from "./presentation/admin/Zones/Zona";
 import VenderManualmente from "./presentation/admin/Store/Store";
 import PagoBoletosEfectivo from "./presentation/admin/Payment/PagoBoletos";
+import PagoExitoso from "./presentation/client/Pago/Pago_exitoso";
+import PaymentHistory from "./presentation/admin/PaymentHistory/PaymentHistory";
+import ReportPayments from "./presentation/admin/Reports/ReportPayments";
 
-const Reports: React.FC = () => (
-  <div>
-    <h2>� Reportes</h2>
-    <p>Vista temporal — aquí se implementará la gestión de reportes.</p>
-  </div>
-);
-
-const PaymentHistory: React.FC = () => (
-  <div>
-    <h2>👥 Payment history</h2>
-    <p>Vista temporal — aquí se implementará la gestión de usuarios.</p>
-  </div>
-);
 
 const App: React.FC = () => {
   return (
@@ -40,7 +30,7 @@ const App: React.FC = () => {
         <Route path="/events" element={<Events />} />
         <Route path="/users" element={<UsuarioComponent />} />
         <Route path="/zones" element={<ZonasComponent />} />
-        <Route path="/reports" element={<Reports />} />
+        <Route path="/reports" element={<ReportPayments />} />
         <Route path="/payment-history" element={<PaymentHistory />} />
         <Route path="/VenderManualmente" element={<VenderManualmente />} />
         <Route path="/pagoBoletos" element={<PagoBoletosEfectivo />} />
@@ -51,6 +41,7 @@ const App: React.FC = () => {
         <Route path="/client/eventos" element={<EventClient />} />
         <Route path="/client/MostrarMapaEvento/:id" element={<MapForEvent />} />
         <Route path="/client/procesar_pago" element={<PagoBoletos />} />
+        <Route path="/client/pago_exitoso" element={<PagoExitoso />} />
       </Route>
 
     </Routes>

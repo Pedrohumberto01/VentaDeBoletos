@@ -16,7 +16,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 export default function PagoBoletosEfectivo() {
   const navigate = useNavigate();
   const location = useLocation();
-
+ 
     const handlePago = async () => {
         const payload = {
             usuarioId: 1, 
