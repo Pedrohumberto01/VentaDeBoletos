@@ -1,18 +1,16 @@
 DELIMITER //
 CREATE FUNCTION VerificarCredenciales(p_email VARCHAR(150), p_contrasenia VARCHAR(255))
-RETURNS INT
+RETURNS VARCHAR(50)
 DETERMINISTIC
 BEGIN
-    DECLARE existe INT;
+    DECLARE v_rol VARCHAR(50);
 
-    SELECT COUNT(*) INTO existe
+    SELECT rol INTO v_rol
     FROM usuarios
-    WHERE email = p_email AND contrasenia = p_contrasenia;
+    WHERE email = p_email AND contrasenia = p_contrasenia
+    LIMIT 1;
 
-    IF existe > 0 THEN
-        RETURN 1; -- Credenciales válidas
-    ELSE
-        RETURN 0; -- No existe usuario con esas credenciales
-    END IF;
+    RETURN IFNULL(v_rol, 'no_existe');
 END//
 DELIMITER ;
+

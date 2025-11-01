@@ -72,3 +72,13 @@ CREATE TABLE pagos (
     fecha_pago TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (boleto_id) REFERENCES boletos(id)
 );
+
+Alter table pagos modify boleto_id int null;
+
+CREATE TABLE pago_boletos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    pago_id INT NOT NULL,
+    boleto_id INT NOT NULL,
+    FOREIGN KEY (pago_id) REFERENCES pagos(id),
+    FOREIGN KEY (boleto_id) REFERENCES boletos(id)
+);
