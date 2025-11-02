@@ -19,6 +19,7 @@ namespace VentadeBoletosAPI.Models
 
         [Column("zona_id")]
         public int ZonaId { get; set; }
+        public Zona? Zona { get; set; }
 
         [Column("asiento_id")]
         public int? AsientoId { get; set; }
@@ -32,6 +33,8 @@ namespace VentadeBoletosAPI.Models
 
         [Column("codigo_qr")]
         public string? CodigoQR { get; set; }
+
+        //public Pago? Pago { get; set; }
 
         [Column("created_at")]
         public DateTime Created_At { get; set; } = DateTime.UtcNow;
