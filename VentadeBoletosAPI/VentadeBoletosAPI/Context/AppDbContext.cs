@@ -41,6 +41,15 @@ namespace VentadeBoletosAPI.Context
                 .WithMany(b => b.PagoBoletos)
                 .HasForeignKey(pb => pb.BoletoId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<PagoBoleto>(entity =>
+            {
+                entity.ToTable("pagoboletos");
+
+                entity.Property(pb => pb.PagoId).HasColumnName("pago_id");
+                entity.Property(pb => pb.BoletoId).HasColumnName("boleto_id");
+            });
+
         }
     }
 }

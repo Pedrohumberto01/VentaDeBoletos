@@ -132,7 +132,7 @@ namespace VentadeBoletosAPI.Controllers
                     var session = stripeEvent.Data.Object as Session;
 
                     var pago = await _context.Pagos
-                        .OrderByDescending(p => p.Id)
+                        .OrderByDescending(p => p.Id)   
                         .Include(p => p.PagoBoletos!)
                         .ThenInclude(pb => pb.Boleto)
                         .FirstOrDefaultAsync(p => p.EstadoPago == "pendiente");
