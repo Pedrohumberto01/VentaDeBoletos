@@ -16,6 +16,7 @@ import PagoBoletosEfectivo from "./presentation/admin/Payment/PagoBoletos";
 import PagoExitoso from "./presentation/client/Pago/Pago_exitoso";
 import PaymentHistory from "./presentation/admin/PaymentHistory/PaymentHistory";
 import ReportPayments from "./presentation/admin/Reports/ReportPayments";
+import Register from "./presentation/Login/Register";
 
 
 const App: React.FC = () => {
@@ -23,6 +24,7 @@ const App: React.FC = () => {
     <Routes>
       {/* Ruta para Login sin el Layout */}
       <Route path="/" element={<Login />} />
+      <Route path="/register" element={<Register />} />
 
       {/* Rutas protegidas dentro del Layout */}
       <Route element={<Layout />}>

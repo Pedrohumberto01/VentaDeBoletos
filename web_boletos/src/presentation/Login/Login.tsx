@@ -123,6 +123,7 @@ export default function Login() {
               Sign In
             </button>
           </form>
+          <a href="/register" className="text-blue-500 hover:underline">¿No tienes una cuenta? Regístrate</a>
         </div>
       </div>
 
