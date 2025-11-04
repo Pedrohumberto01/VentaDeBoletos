@@ -23,6 +23,7 @@ namespace VentadeBoletosAPI.Controllers
             public string? CodigoQR { get; set; }
             public string? NumeroAsiento { get; set; }
             public string? FechaPago { get; set; }
+            public int? IdUsuario { get; set; }
         }
 
         [HttpGet("ObtenerHistorialdePagos")]
@@ -40,7 +41,8 @@ namespace VentadeBoletosAPI.Controllers
                     NumeroAsiento = pb.Boleto != null && pb.Boleto.Asiento != null
                                     ? pb.Boleto.Asiento.NumeroAsiento
                                     : null,
-                    FechaPago = pb.Pago != null ? pb.Pago.FechaPago.ToString() : null
+                    FechaPago = pb.Pago != null ? pb.Pago.FechaPago.ToString() : null,
+                    IdUsuario = pb.Boleto != null ? pb.Boleto.UsuarioId : 1 //administrador
                 })
                 .ToListAsync();
 

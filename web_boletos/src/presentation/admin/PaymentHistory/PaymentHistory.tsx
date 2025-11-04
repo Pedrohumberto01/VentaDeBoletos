@@ -9,9 +9,10 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  IconButton,
 } from "@mui/material";
-import { Edit, Visibility } from "@mui/icons-material";
+
+
+import QRCode from 'react-qr-code';
 
 interface Payment {
   id: number;
@@ -20,6 +21,7 @@ interface Payment {
   codigoQR: string;
   numeroAsiento: string;
   fechaPago: string;
+  idUsuario : number;
 }
 
 const PaymentHistory: React.FC = () => {
@@ -28,6 +30,11 @@ const PaymentHistory: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [search, setSearch] = useState("");
+
+    const [value, setValue] = useState();
+    const [back, setBack] = useState('#FFFFFF');
+    const [fore, setFore] = useState('#000000');
+    const [size, setSize] = useState(64);
 
     // 🔹 Obtener payments desde API
     const obtenerPayments = async () => {
@@ -50,10 +57,6 @@ const PaymentHistory: React.FC = () => {
     },
     []);
 
-    const handleOpenDialog = (payments?: Payment) => {
-
-    };
-
       // 🔹 Filtrado de pagos
     const filteredPayments = payments.filter((p) =>
         p.id.toString().includes(search.toLowerCase())
@@ -61,7 +64,7 @@ const PaymentHistory: React.FC = () => {
 
     return (
     <Box sx={{ p: 3 }}>
-
+      
       <Typography variant="h4" gutterBottom>
         🏟️ Listado de Pagos
       </Typography>
@@ -83,7 +86,7 @@ const PaymentHistory: React.FC = () => {
                   <TableCell>Código QR</TableCell>
                   <TableCell>Número de Asiento</TableCell>
                   <TableCell align="center">Fecha de Pago</TableCell>
-                  <TableCell align="center">Detalles</TableCell>
+                 
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -92,16 +95,25 @@ const PaymentHistory: React.FC = () => {
                         <TableCell>{payments.id}</TableCell>
                         <TableCell>{payments.pagoId}</TableCell>
                         <TableCell>{payments.boletoId}</TableCell>
-                        <TableCell>{payments.codigoQR}</TableCell>
+                        <TableCell>{
+                                  <QRCode
+                                      title="GeeksForGeeks"
+                                      value={"https://localhost:7082/client/pago_exitoso?id=" + 
+                                        payments.pagoId + "Codigo absoluto=" + payments.codigoQR +
+                                        "&BoletoId=" + payments.boletoId + "&NumeroAsiento=" + payments.numeroAsiento +
+                                        "&FechaPago=" + payments.fechaPago +
+                                        "&idUsuario=" + payments.idUsuario
+                                      }
+                                      bgColor={back}
+                                      fgColor={fore}
+                                      size={size === 1 ? 0 : size}
+                                  />}
+                        </TableCell>
                         <TableCell>{payments.numeroAsiento}</TableCell>
                         <TableCell align="center">
                             {payments.fechaPago}
                         </TableCell>
-                        <TableCell align="center">
-                            <IconButton color="primary" onClick={() => handleOpenDialog(payments)}>
-                                <Visibility />
-                            </IconButton>
-                        </TableCell>
+                        
                         </TableRow>
                     ))}
               </TableBody>
