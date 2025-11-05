@@ -17,6 +17,7 @@ import PagoExitoso from "./presentation/client/Pago/Pago_exitoso";
 import PaymentHistory from "./presentation/admin/PaymentHistory/PaymentHistory";
 import ReportPayments from "./presentation/admin/Reports/ReportPayments";
 import Register from "./presentation/Login/Register";
+import ConfirmacionBoletos from "./presentation/admin/Payment/Boletos/GenerarBoletos";
 
 
 const App: React.FC = () => {
@@ -36,6 +37,7 @@ const App: React.FC = () => {
         <Route path="/payment-history" element={<PaymentHistory />} />
         <Route path="/VenderManualmente" element={<VenderManualmente />} />
         <Route path="/pagoBoletos" element={<PagoBoletosEfectivo />} />
+        <Route path="/confirmacion" element={<ConfirmacionBoletos />} />
       </Route>
 
       <Route element={<LayoutClient />}>
