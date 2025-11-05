@@ -37,14 +37,14 @@ export default function Login() {
       // Mostrar modal según respuesta
       switch (resultado) {
         case "admin":
-          setModalMessage("✅ Bienvenido al sistema de boletos");
-          setShowModal(true);
-          setTimeout(() => navigate("/dashboard"), 1500); // redirige después de 1.5s
+          //setModalMessage("✅ Bienvenido al sistema de boletos");
+          ///setShowModal(true);
+          setTimeout(() => navigate("/dashboard")); // redirige después de 1.5s
           break;
         case "cliente":
-          setModalMessage("✅ Bienvenido Cliente");
-          setShowModal(true);
-          setTimeout(() => navigate("/client"), 1500);
+          //setModalMessage("✅ Bienvenido Cliente");
+          //setShowModal(true);
+          setTimeout(() => navigate("/client"));
           break;
         case "no_existe":
           setModalMessage("❌ Usuario o contraseña incorrectos");

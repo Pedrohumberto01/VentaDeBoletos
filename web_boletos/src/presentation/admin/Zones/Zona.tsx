@@ -17,6 +17,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  MenuItem,
 } from "@mui/material";
 import { Edit, Delete, Add } from "@mui/icons-material";
 
@@ -215,6 +216,17 @@ const ZonasComponent: React.FC = () => {
               setCurrentZona({ ...currentZona, precio: Number(e.target.value) })
             }
           />
+          <TextField
+            select
+            margin="dense"
+            label="Estado"
+            fullWidth
+            defaultValue="Habilitado"
+          >
+            <MenuItem value="Habilitado">Habilitado</MenuItem>
+            <MenuItem value="Deshabilitado">Deshabilitado</MenuItem>
+          </TextField>
+
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog}>Cancelar</Button>

@@ -6,6 +6,7 @@ import {
   Card,
   CardContent,
   Button,
+  TextField,
 } from "@mui/material";
 import {
   BarChart,
@@ -47,6 +48,8 @@ interface ReporteData {
 const ReportPayments: React.FC = () => {
   const [data, setData] = useState<ReporteData | null>(null);
   const reportRef = useRef<HTMLDivElement>(null);
+  const [fechaIni, setFechaIni] = useState("");
+  const [fechaFin, setFechaFin] = useState("");
 
   const fetchReporte = async () => {
     try {
@@ -76,6 +79,17 @@ const ReportPayments: React.FC = () => {
 
   useEffect(() => {
     fetchReporte();
+    // 📆 Calcula el rango del último mes
+    const hoy = new Date();
+    const haceUnMes = new Date();
+    haceUnMes.setMonth(hoy.getMonth() - 1);
+
+    // 🕐 Formatea las fechas a yyyy-MM-dd (requerido por el input type="date")
+    const formatearFecha = (fecha: Date) =>
+      fecha.toISOString().split("T")[0];
+
+    setFechaIni(formatearFecha(haceUnMes));
+    setFechaFin(formatearFecha(hoy));
   }, []);
 
   const colors = {
@@ -110,8 +124,26 @@ const ReportPayments: React.FC = () => {
 
       <Box ref={reportRef}>
         <Typography variant="subtitle1" sx={{ mb: 2 }}>
-          📅 Período: {data.fecha_ini} → {data.fecha_fin}
+          📅 Período: 
         </Typography>
+        <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
+      <TextField
+        label="Fecha inicio"
+        type="date"
+        fullWidth
+        InputLabelProps={{ shrink: true }}
+        value={fechaIni}
+        onChange={(e) => setFechaIni(e.target.value)}
+      />
+      <TextField
+        label="Fecha fin"
+        type="date"
+        fullWidth
+        InputLabelProps={{ shrink: true }}
+        value={fechaFin}
+        onChange={(e) => setFechaFin(e.target.value)}
+      />
+    </Box>
 
         <Grid container spacing={3}>
           {/* Ganancias por zona */}

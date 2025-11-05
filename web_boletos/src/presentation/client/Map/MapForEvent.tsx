@@ -2,6 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import BitMap from "../../../assets/bitmap.png";
 import EventSeatIcon from "@mui/icons-material/EventSeat";
+import { Pagination } from "@mui/material";
 
 export default function MostrarMapaEvento() {
   const { id } = useParams();
@@ -11,6 +12,10 @@ export default function MostrarMapaEvento() {
   const [zonaSeleccionada, setZonaSeleccionada] = useState<string>("");
   const [asientos, setAsientos] = useState<any[]>([]);
   const [asientosSeleccionados, setAsientosSeleccionados] = useState<number[]>([]);
+
+  // 🔹 Estados para paginación
+  const [page, setPage] = useState(1);
+  const asientosPorPagina = 20; // puedes ajustar a 20, 30, etc.
 
   // 🔹 Traer zonas desde la API
   const traerZonas = async () => {
@@ -44,6 +49,12 @@ export default function MostrarMapaEvento() {
   const asientosZona = zonaSeleccionada
     ? asientos.filter((a) => a.zonaId === parseInt(zonaSeleccionada))
     : [];
+
+  // 🔹 Paginación de asientos
+  const totalPaginas = Math.ceil(asientosZona.length / asientosPorPagina);
+  const inicio = (page - 1) * asientosPorPagina;
+  const fin = inicio + asientosPorPagina;
+  const asientosPaginados = asientosZona.slice(inicio, fin);
 
   // 🔹 Alternar selección
   const toggleAsiento = (idAsiento: number, estado: string) => {
@@ -102,6 +113,7 @@ export default function MostrarMapaEvento() {
           onChange={(e) => {
             setZonaSeleccionada(e.target.value);
             setAsientosSeleccionados([]); // reset
+            setPage(1); // reiniciar paginación al cambiar zona
           }}
         >
           <option value="">-- Seleccione una zona --</option>
@@ -116,11 +128,13 @@ export default function MostrarMapaEvento() {
         {zonaSeleccionada && (
           <div className="mt-6 p-4 border rounded-lg bg-gray-50">
             <h3 className="text-lg font-semibold text-gray-800 mb-3">
-              Zona seleccionada: {zonas.find((z) => z.id === parseInt(zonaSeleccionada))?.nombre}
+              Zona seleccionada:{" "}
+              {zonas.find((z) => z.id === parseInt(zonaSeleccionada))?.nombre}
             </h3>
 
+            {/* Grid de asientos paginados */}
             <div className="grid grid-cols-5 gap-2 justify-center">
-              {asientosZona.map((asiento) => {
+              {asientosPaginados.map((asiento) => {
                 const seleccionado = asientosSeleccionados.includes(asiento.id);
                 const estado = asiento.estado.toLowerCase();
 
@@ -143,7 +157,8 @@ export default function MostrarMapaEvento() {
                         color: color,
                         fontSize: "2.5rem",
                         opacity: estado !== "disponible" ? 0.6 : 1,
-                        cursor: estado !== "disponible" ? "not-allowed" : "pointer",
+                        cursor:
+                          estado !== "disponible" ? "not-allowed" : "pointer",
                         transition: "transform 0.15s ease",
                       }}
                     />
@@ -151,6 +166,20 @@ export default function MostrarMapaEvento() {
                 );
               })}
             </div>
+
+            {/* 🔹 Paginación de asientos */}
+            {totalPaginas > 1 && (
+              <div className="flex justify-center mt-4">
+                <Pagination
+                  count={totalPaginas}
+                  page={page}
+                  onChange={(_, value) => setPage(value)}
+                  color="primary"
+                  showFirstButton
+                  showLastButton
+                />
+              </div>
+            )}
 
             {/* Mostrar asientos seleccionados */}
             {asientosSeleccionados.length > 0 && (
