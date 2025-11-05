@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace VentadeBoletosAPI.Models
 {
-    [Table("pagoboletos")]
+    [Table("pago_boletos")]
     public class PagoBoleto
     {
         [Key]
