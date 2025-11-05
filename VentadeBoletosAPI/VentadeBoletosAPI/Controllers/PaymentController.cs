@@ -31,33 +31,6 @@ namespace VentadeBoletosAPI.Controllers
             var totalCentavos = (long)((request.Monto / 37) * 100);
 
             var domain = $"{Request.Scheme}://{Request.Host}";
-            var options = new SessionCreateOptions
-            {
-                PaymentMethodTypes = new List<string> { "card" },
-                LineItems = new List<SessionLineItemOptions>
-        {
-            new SessionLineItemOptions
-            {
-                PriceData = new SessionLineItemPriceDataOptions
-                {
-                    Currency = "usd",
-                    UnitAmount = totalCentavos,
-                    ProductData = new SessionLineItemPriceDataProductDataOptions
-                    {
-                        Name = $"Boletos Zona {request.ZonaId}",
-                        Description = $"Compra de {request.BoletosIds.Count} boletos"
-                    }
-                },
-                Quantity = 1
-            }
-        },
-                Mode = "payment",
-                SuccessUrl = $"{domain}/client/pago_exitoso",
-                CancelUrl = $"{domain}/client/pago_cancelado"
-            };
-
-            var service = new SessionService();
-            var session = service.Create(options);
 
             // 1️⃣ Guardar pago pendiente
             var pago = new Pago
@@ -67,11 +40,12 @@ namespace VentadeBoletosAPI.Controllers
                 EstadoPago = "pendiente",
                 FechaPago = DateTime.UtcNow
             };
-
             _context.Pagos.Add(pago);
             await _context.SaveChangesAsync();
 
-            // 2️⃣ Crear boletos "reservados"
+            // 2️⃣ Crear boletos "reservados" y obtener códigos QR
+            var codigosQR = new List<string>();
+
             foreach (var asientoId in request.BoletosIds)
             {
                 var boleto = new Boleto
@@ -88,7 +62,7 @@ namespace VentadeBoletosAPI.Controllers
                 _context.Boletos.Add(boleto);
                 await _context.SaveChangesAsync();
 
-                // 🔸 Marca el asiento como vendido
+                // Marca el asiento como vendido
                 var asiento = await _context.Asientos.FindAsync(asientoId);
                 if (asiento != null)
                 {
@@ -101,13 +75,45 @@ namespace VentadeBoletosAPI.Controllers
                     PagoId = pago.Id,
                     BoletoId = boleto.Id
                 };
-                // Vincular boleto con pago
                 _context.PagoBoletos.Add(pagob);
 
-                await _context.SaveChangesAsync();
+                codigosQR.Add(boleto.CodigoQR);
             }
 
             await _context.SaveChangesAsync();
+
+            // 3️⃣ Preparar URL de éxito con códigos QR
+            var codigosQuery = string.Join(",", codigosQR);
+            var successUrl = $"http://localhost:5173/client/pago_exitoso?codigosQR={codigosQuery}";
+
+            // 4️⃣ Crear sesión de Stripe
+            var options = new SessionCreateOptions
+            {
+                PaymentMethodTypes = new List<string> { "card" },
+                LineItems = new List<SessionLineItemOptions>
+                {
+                    new SessionLineItemOptions
+                    {
+                        PriceData = new SessionLineItemPriceDataOptions
+                        {
+                            Currency = "usd",
+                            UnitAmount = totalCentavos,
+                            ProductData = new SessionLineItemPriceDataProductDataOptions
+                            {
+                                Name = $"Boletos Zona {request.ZonaId}",
+                                Description = $"Compra de {request.BoletosIds.Count} boletos"
+                            }
+                        },
+                        Quantity = 1
+                    }
+                },
+                Mode = "payment",
+                SuccessUrl = successUrl,
+                CancelUrl = $"http://localhost:5173/client"
+            };
+
+            var service = new SessionService();
+            var session = service.Create(options);
 
             return Ok(new { url = session.Url });
         }
@@ -132,7 +138,7 @@ namespace VentadeBoletosAPI.Controllers
                     var session = stripeEvent.Data.Object as Session;
 
                     var pago = await _context.Pagos
-                        .OrderByDescending(p => p.Id)   
+                        .OrderByDescending(p => p.Id)
                         .Include(p => p.PagoBoletos!)
                         .ThenInclude(pb => pb.Boleto)
                         .FirstOrDefaultAsync(p => p.EstadoPago == "pendiente");
