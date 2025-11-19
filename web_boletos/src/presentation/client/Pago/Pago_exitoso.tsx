@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 import QRCode from "react-qr-code";
 import { useLocation } from "react-router-dom";
 import jsPDF from "jspdf";

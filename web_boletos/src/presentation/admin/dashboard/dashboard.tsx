@@ -129,7 +129,7 @@ const Dashboard: React.FC = () => {
       {/* Métricas */}
       <Grid container spacing={3} sx={{ mb: 3 }}>
         {mockMetrics.map((metric, i) => (
-          <Grid item xs={12} sm={6} md={3} key={i}>
+          <Grid size={{ xs:12, sm:6, md:3 }} key={i}>
             <Card sx={{ borderTop: `4px solid ${colors.rojo}` }}>
               <CardContent>
                 <Typography variant="body2" color="textSecondary">
@@ -146,7 +146,7 @@ const Dashboard: React.FC = () => {
 
       <Grid container spacing={3}>
         {/* Ventas PieChart */}
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs:12, md:6 }}>
           <Card>
             <CardContent>
               <Typography variant="h6" sx={{ color: colors.rojo }}>
@@ -176,7 +176,7 @@ const Dashboard: React.FC = () => {
         </Grid>
         
         {/* Ventas por zona */}
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs:12, md:6 }}>
           <Card>
             <CardContent>
               <Typography variant="h6" sx={{ color: colors.rojo }}>

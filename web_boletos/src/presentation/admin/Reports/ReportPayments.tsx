@@ -1,8 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
+import Grid from "@mui/material/Grid";
+import logo from "../../../assets/Logo.jpg";
+import bgHeader from "../../../assets/estadio.webp";
 import {
   Box,
   Typography,
-  Grid,
   Card,
   CardContent,
   Button,
@@ -59,23 +61,115 @@ const ReportPayments: React.FC = () => {
       setData(json);
     } catch (error) {
       console.error("Error al traer el reporte:", error);
-    }
+    } 
+  };
+
+  const colors = {
+    azul: "#0057b7",
+    rojo: "#d62828",
+    verde: "#2a9d8f",
+    gris: "#f4f4f4",
+    white: "ffffff",
   };
 
   const exportToPDF = async () => {
     if (!reportRef.current) return;
-    const input = reportRef.current;
 
-    const canvas = await html2canvas(input, { scale: 2 });
+    // Función para convertir imagen a Base64
+    const imageToBase64 = (img: HTMLImageElement): Promise<string> =>
+      new Promise((resolve) => {
+        const canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext("2d")!;
+        ctx.drawImage(img, 0, 0);
+        resolve(canvas.toDataURL("image/png"));
+      });
+
+    // Cargar logo
+    const logoImg = new Image();
+    logoImg.src = logo; // tu logo importado
+    await new Promise((res) => (logoImg.onload = res));
+    const logoBase64 = await imageToBase64(logoImg);
+
+    // Cargar background del header
+    const bgImg = new Image();
+    bgImg.src = bgHeader;
+    await new Promise((res) => (bgImg.onload = res));
+    const bgBase64 = await imageToBase64(bgImg);
+
+    // Capturar contenido principal
+    const canvas = await html2canvas(reportRef.current, { scale: 1.5, useCORS: true });
     const imgData = canvas.toDataURL("image/png");
-    const pdf = new jsPDF("p", "mm", "a4");
 
-    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdf = new jsPDF("p", "mm", "a4");
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+    const pdfWidth = pageWidth - 20;
     const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
-    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+    const headerHeight = 40;
+
+    // Función para dibujar header con imagen de fondo
+    const drawHeader = () => {
+      // Fondo con imagen
+      pdf.addImage(bgBase64, "PNG", 0, 0, pageWidth, headerHeight);
+
+      // Logo a la izquierda
+      pdf.addImage(logoBase64, "PNG", 10, 7, 45, 25);
+
+      // Rectángulo semitransparente detrás del título para resaltar sobre la imagen
+      const titleX = 65;
+      pdf.setFillColor(0, 0, 0, 0.3); // negro semi-transparente
+
+      // Título con sombra
+      const title = "HomeRunStruck";
+      pdf.setFont("helvetica", "bold");
+      pdf.setFontSize(44);
+
+      // Sombra
+      pdf.setTextColor(0, 0, 0, 0.3);
+      pdf.setLineWidth(1.5);
+      pdf.text(title, titleX + 0.8, 22 + 0.8, { renderingMode: "stroke" });
+
+      // Texto principal
+      pdf.setTextColor(255, 255, 255);
+      pdf.text(title, titleX, 22);
+
+      // Línea separadora fina
+      pdf.setDrawColor(255, 255, 255);
+      pdf.setLineWidth(0.5);
+      pdf.line(10, headerHeight - 2, pageWidth - 10, headerHeight - 2);
+    };
+
+    drawHeader();
+
+    let position = headerHeight + 5;
+    const spacing = 10;
+    const adjustedHeight = pdfHeight - spacing * 2;
+
+    if (pdfHeight + headerHeight < pageHeight - 20) {
+      pdf.addImage(imgData, "PNG", 10, position, pdfWidth, adjustedHeight);
+    } else {
+      let heightLeft = adjustedHeight;
+      let contentPageHeight = pageHeight - headerHeight - 10;
+      let y = position;
+
+      while (heightLeft > 0) {
+        pdf.addImage(imgData, "PNG", 10, y, pdfWidth, adjustedHeight);
+        heightLeft -= contentPageHeight;
+        if (heightLeft > 0) {
+          pdf.addPage();
+          drawHeader();
+          y = headerHeight + 5;
+        }
+      }
+    }
+
     pdf.save("ReporteGanancias.pdf");
   };
+
+
 
   useEffect(() => {
     fetchReporte();
@@ -91,13 +185,6 @@ const ReportPayments: React.FC = () => {
     setFechaIni(formatearFecha(haceUnMes));
     setFechaFin(formatearFecha(hoy));
   }, []);
-
-  const colors = {
-    azul: "#0057b7",
-    rojo: "#d62828",
-    verde: "#2a9d8f",
-    gris: "#f4f4f4",
-  };
 
   if (!data)
     return (
@@ -126,11 +213,12 @@ const ReportPayments: React.FC = () => {
         <Typography variant="subtitle1" sx={{ mb: 2 }}>
           📅 Período: 
         </Typography>
-        <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
+        <Box sx={{ display: "flex", gap: 5, mb: 5 }}>
       <TextField
         label="Fecha inicio"
         type="date"
         fullWidth
+        sx={{ minWidth: "180px" }}
         InputLabelProps={{ shrink: true }}
         value={fechaIni}
         onChange={(e) => setFechaIni(e.target.value)}
@@ -139,6 +227,7 @@ const ReportPayments: React.FC = () => {
         label="Fecha fin"
         type="date"
         fullWidth
+        sx={{ minWidth: "180px" }}
         InputLabelProps={{ shrink: true }}
         value={fechaFin}
         onChange={(e) => setFechaFin(e.target.value)}
@@ -147,7 +236,7 @@ const ReportPayments: React.FC = () => {
 
         <Grid container spacing={3}>
           {/* Ganancias por zona */}
-          <Grid item xs={12} md={6}>
+           <Grid size={{ xs: 12, sm: 6 }}>
             <Card>
               <CardContent>
                 <Typography
@@ -170,7 +259,7 @@ const ReportPayments: React.FC = () => {
           </Grid>
 
           {/* Vendidos por zona */}
-          <Grid item xs={12} md={6}>
+          <Grid size={{ xs: 12, sm: 6 }}>
             <Card>
               <CardContent>
                 <Typography
@@ -193,7 +282,7 @@ const ReportPayments: React.FC = () => {
           </Grid>
 
           {/* Rendimiento por evento */}
-          <Grid item xs={12}>
+          <Grid size={{ xs: 12 }}>
             <Card>
               <CardContent>
                 <Typography

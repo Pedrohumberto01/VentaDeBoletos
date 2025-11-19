@@ -1,4 +1,10 @@
 import { useEffect, useState } from "react";
+import logo from "../../../assets/Logo.jpg";
+import bgHeader from "../../../assets/estadio.webp";
+import jsPDF from "jspdf";
+import ExcelJS from "exceljs";
+import { saveAs } from "file-saver";
+import autoTable from "jspdf-autotable";
 import {
   Box,
   Card,
@@ -11,8 +17,10 @@ import {
   TableRow,
   TablePagination,
   TextField,
+  Button,
 } from "@mui/material";
 import QRCode from "react-qr-code";
+
 
 interface Payment {
   id: number;
@@ -56,6 +64,200 @@ const PaymentHistory: React.FC = () => {
     obtenerPayments();
   }, []);
 
+  const exportToExcel = async () => {
+    if (payments.length === 0) return;
+
+    const workbook = new ExcelJS.Workbook();
+    const sheet = workbook.addWorksheet("Zonas");
+
+    // ===== TÍTULO =====
+    sheet.mergeCells("B1:E2"); // Deja espacio para logo en A1:A2
+    const titleCell = sheet.getCell("B1");
+    titleCell.value = "HomeRunStruck";
+    titleCell.font = { size: 20, bold: true, color: { argb: "FFFFFFFF" } };
+    titleCell.alignment = { horizontal: "center", vertical: "middle" };
+    sheet.getRow(1).height = 30;
+    sheet.getRow(2).height = 25;
+
+    // Aplicar fondo solo al rango del título
+    ["B1", "C1", "B2", "C2" ].forEach((cellAddr) => {
+      const cell = sheet.getCell(cellAddr);
+      cell.fill = {
+        type: "pattern",
+        pattern: "solid",
+        fgColor: { argb: "FF34495E" },
+      };
+    });
+
+    sheet.getRow(1).height = 30;
+    sheet.getRow(2).height = 25;
+
+
+    // ===== LOGO =====
+    sheet.addImage(workbook.addImage({
+        buffer: await fetch(logo).then((r) => r.arrayBuffer()),
+        extension: "png",
+      }), {
+      tl: { col: 0, row: 0 }, // esquina superior izquierda
+      ext: { width: 80, height: 50 },
+    });
+
+    // ===== ENCABEZADO DE LA TABLA =====
+    const headerRow = sheet.addRow(["ID de Pago", "ID de Boleto", "Código QR", "Número de Asiento", "Fecha de Pago"]);
+    headerRow.font = { bold: true, color: { argb: "FFFFFFFF" } };
+    headerRow.alignment = { horizontal: "center", vertical: "middle" };
+    headerRow.height = 20;
+
+    headerRow.eachCell((cell) => {
+      cell.fill = {
+        type: "pattern",
+        pattern: "solid",
+        fgColor: { argb: "FF2C3E50" },
+      };
+      cell.border = {
+        top: { style: "thin" },
+        left: { style: "thin" },
+        bottom: { style: "thin" },
+        right: { style: "thin" },
+      };
+    });
+
+    // ===== FILAS DE DATOS =====
+    payments.forEach((p) => {
+      const row = sheet.addRow([p.boletoId, p.boletoId || "-", p.codigoQR || "-", p.numeroAsiento || "-",  p.fechaPago || "-"]);
+      row.alignment = { horizontal: "center", vertical: "middle" };
+      row.eachCell((cell) => {
+        cell.border = {
+          top: { style: "thin" },
+          left: { style: "thin" },
+          bottom: { style: "thin" },
+          right: { style: "thin" },
+        };
+      });
+    });
+
+    // ===== Ajuste automático de columnas =====
+    sheet.columns.forEach((col) => {
+      let maxLength = 10;
+      headerRow.eachCell?.((cell) => {
+        cell.border = {
+          top: { style: "thin" },
+          left: { style: "thin" },
+          bottom: { style: "thin" },
+          right: { style: "thin" },
+        };
+      });
+      col.width = maxLength + 5;
+    });
+
+    // ===== Logo =====
+    sheet.addImage(workbook.addImage({
+        buffer: await fetch(logo).then((r) => r.arrayBuffer()),
+        extension: "png",
+      }), {
+      tl: { col: 0, row: 0 },
+      ext: { width: 105, height: 55 },
+    });
+
+    // ===== Guardar archivo =====
+    const buffer = await workbook.xlsx.writeBuffer();
+    saveAs(new Blob([buffer], { type: "application/octet-stream" }), "ReportePayments.xlsx");
+  };
+
+ const exportToPDF = async () => {
+    const pdf = new jsPDF("p", "mm", "a4");
+
+    // === Convertir imágenes a Base64 ===
+    const toBase64 = (src: string) =>
+      new Promise<string>((resolve) => {
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+        img.src = src;
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          canvas.width = img.width;
+          canvas.height = img.height;
+          const ctx = canvas.getContext("2d")!;
+          ctx.drawImage(img, 0, 0);
+          resolve(canvas.toDataURL("image/png"));
+        };
+      });
+
+    const logoBase64 = await toBase64(logo);
+    const bgBase64 = await toBase64(bgHeader);
+
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const headerHeight = 40;
+
+    const drawHeader = () => {
+      // Fondo con imagen
+      pdf.addImage(bgBase64, "PNG", 0, 0, pageWidth, headerHeight);
+
+      // Logo a la izquierda
+      pdf.addImage(logoBase64, "PNG", 10, 7, 45, 25);
+
+      // Rectángulo semitransparente detrás del título
+      const titleX = 65;
+      pdf.setFillColor(0, 0, 0, 0.3);
+
+      // Título con sombra
+      const title = "HomeRunStruck";
+      pdf.setFont("helvetica", "bold");
+      pdf.setFontSize(44);
+
+      // Sombra con borde grueso
+      pdf.setTextColor(0, 0, 0, 0.3);
+      pdf.setLineWidth(1.5);
+      pdf.text(title, titleX + 0.8, 22 + 0.8, { renderingMode: "stroke" });
+
+      // Texto principal
+      pdf.setTextColor(255, 255, 255);
+      pdf.text(title, titleX, 22);
+
+      // Línea separadora
+      pdf.setDrawColor(255, 255, 255);
+      pdf.setLineWidth(0.5);
+      pdf.line(10, headerHeight - 2, pageWidth - 10, headerHeight - 2);
+    };
+
+    // Dibujar header en página 1
+    drawHeader();
+
+    // ============================
+    // TABLA
+    // ============================
+    autoTable(pdf, {
+      startY: headerHeight + 8, // justo debajo del header
+      head: [["ID de Pago", "ID de Boleto", "Código QR", "Número de Asiento", "Fecha de Pago"]],
+      body: payments.map((p) => [
+        p.pagoId,
+        p.boletoId || "-",
+        p.codigoQR,
+        p.numeroAsiento,
+        p.fechaPago
+      ]),
+      styles: {
+        fontSize: 10,
+        cellPadding: 3,
+      },
+      headStyles: {
+        fillColor: [30, 30, 30],
+        textColor: 255,
+        fontStyle: "bold",
+      },
+      alternateRowStyles: {
+        fillColor: [245, 245, 245],
+      },
+      didDrawPage: (data) => {
+        if (data.pageNumber > 1) {
+          drawHeader();
+        }
+      },
+    });
+
+    pdf.save("ReportePayments.pdf");
+  };
+
   // 🔹 Filtrado de pagos
   const filteredPayments = payments.filter((p) =>
     p.id.toString().includes(search.toLowerCase()) ||
@@ -84,21 +286,41 @@ const PaymentHistory: React.FC = () => {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        🏟️ Listado de Pagos
-      </Typography>
+        <Typography variant="h4" gutterBottom>
+          🏟️ Listado de Pagos
+        </Typography>
 
-      {/* 🔍 Filtro */}
-      <TextField
-        label="Buscar pago..."
-        variant="outlined"
-        size="small"
-        fullWidth
-        sx={{ mb: 2 }}
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        placeholder="Buscar por ID, asiento o fecha..."
-      />
+        <Box  sx={{ display: "flex", gap: 2, mb: 2, }}>
+        {/* 🔍 Filtro */}
+        <TextField
+          label="Buscar pago..."
+          variant="outlined"
+          size="small"
+          fullWidth
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Buscar por ID, asiento o fecha..."
+          sx={{ flex: 1 }}
+        />
+
+        <Button
+          variant="contained"
+          color="error"
+          onClick={exportToPDF}
+          sx={{ borderRadius: 2, fontWeight: "bold", whiteSpace: "nowrap" }}
+        >
+          📄 Exportar PDF
+        </Button>
+
+        <Button
+          variant="contained"
+          color="success"
+          onClick={exportToExcel}
+          sx={{ fontWeight: "bold", whiteSpace: "nowrap" }}
+        >
+          📊 Exportar Excel
+        </Button>
+      </Box>
 
       <Card sx={{ boxShadow: 3 }}>
         <CardContent>

@@ -75,7 +75,7 @@ CREATE TABLE pagos (
 
 Alter table pagos modify boleto_id int null;
 
-CREATE TABLE pago_boletos (
+CREATE TABLE pagoboletos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     pago_id INT NOT NULL,
     boleto_id INT NOT NULL,

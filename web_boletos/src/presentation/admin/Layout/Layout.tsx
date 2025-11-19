@@ -19,6 +19,7 @@ import {
   Settings,
   History,
   AddBusinessTwoTone,
+  Backup,
 } from "@mui/icons-material";
 import { NavLink, Outlet } from "react-router-dom";
 
@@ -32,6 +33,7 @@ const navItems = [
   { text: "Reportes", to: "/reports", icon: <AssessmentOutlined /> },
   { text: "Historial de pagos", to: "/payment-history", icon: <History /> },
   { text: "Vender manualmente", to: "/VenderManualmente", icon: <AddBusinessTwoTone /> },
+  { text: "Restauracion y Respaldo BD", to: "/backup-restore", icon: <Backup /> },
   { text: "Cerrar Sesión", to: "/", icon: <Logout /> },
 ];
 

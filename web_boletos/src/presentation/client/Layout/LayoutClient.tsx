@@ -14,7 +14,7 @@ const LayoutClient: React.FC = () => {
           <a href="/client" className="flex items-center">
             <img
               className="h-10 hidden sm:block"
-              src="https://scontent.fmga9-2.fna.fbcdn.net/v/t39.30808-6/480438874_122135051336520352_4713847335549288368_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=yFHS156WL8EQ7kNvwHhu36p&_nc_oc=AdmbV9XwWVXyskCyaJSiuud9pMTrQP4DlFz2d5rilfofLr1BxTpPBCG7DOxyn-pvamU&_nc_zt=23&_nc_ht=scontent.fmga9-2.fna&_nc_gid=PQCMOvQJaxD7_o8-L5dQiA&oh=00_AfdF_jYKliQzZzoEnaJNGFp5q089imtFL37YEV5644K7EQ&oe=68E8F844"
+              src="https://logosnicas.com/wp-content/uploads/2022/08/leones_de_leon_logo.png"
               alt="Logo"
             />
             <img
